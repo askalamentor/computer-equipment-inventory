@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const LocationSchema = new Schema({
   name: { type: String, required: true, minLength: 3, maxLength: 100 },
   address: { type: String, required: true, minLength: 3, maxLength: 200 },
-  inventory: { type: Schema.Types.ObjectId, ref: 'Inventory', required: true },
+  inventory: { type: Schema.Types.ObjectId, ref: 'Inventory' },
 });
 
 // Virtual for location's URL
