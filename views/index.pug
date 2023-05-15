@@ -1,0 +1,15 @@
+extends layout 
+
+block content 
+    h1= title 
+    p Welcome to Computer Equipment Inventory.
+
+    h1 Dynamic Content 
+
+    p The system has the following record counts: 
+
+    ul 
+        li #[strong Categories:] !{category_counts}
+        li #[strong Equipments:] !{equipment_counts}
+        li #[strong Inventories:] !{inventory_counts}
+        li #[strong Locations:] !{location_counts}

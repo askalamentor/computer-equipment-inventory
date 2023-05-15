@@ -1,8 +1,27 @@
-const Equipment = require('../models/equipment');
 const asyncHandler = require('express-async-handler');
 
+const Category = require('../models/category');
+const Equipment = require('../models/equipment');
+const Inventory = require('../models/inventory');
+const Location = require('../models/location');
+
 exports.index = asyncHandler(async (req, res, next) => {
-  res.send('NOTE IMPLEMENTED: Site Home Page');
+  // Get details of categories, equipments, inventories and locations counts (in parallel)
+  const [numCategory, numEquipment, numInventory, numLocation] =
+    await Promise.all([
+      Category.countDocuments({}).exec(),
+      Equipment.countDocuments({}).exec(),
+      Inventory.countDocuments({}).exec(),
+      Location.countDocuments({}).exec(),
+    ]);
+
+  res.render('index', {
+    title: 'Computer Equipment Inventory Home',
+    category_counts: numCategory,
+    equipment_counts: numEquipment,
+    inventory_counts: numInventory,
+    location_counts: numLocation,
+  });
 });
 
 // Display list of all Equipments
