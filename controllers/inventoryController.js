@@ -3,7 +3,17 @@ const asyncHandler = require('express-async-handler');
 
 // Display list of all Inventories
 exports.inventory_list = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Inventory list');
+  const allInventory = await Inventory.find(
+    {},
+    'equipment numberInStock location'
+  )
+    .populate('equipment location')
+    .exec();
+
+  res.render('inventory/inventory_list', {
+    title: 'Inventory List',
+    inventory_list: allInventory,
+  });
 });
 
 // Display detail page for a specific Inventory

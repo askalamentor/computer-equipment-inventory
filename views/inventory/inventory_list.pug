@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+    h1= title 
+
+    div(class="container-fluid")
+        div(class="row justify-content-between")
+            each inventory in inventory_list 
+                div(class="card text-bg-light border-secondary col-5 mt-3 mb-3")
+                    div(class="card-body")
+                        p(class="card-text") #[strong Equipment:] #{inventory.equipment.name}
+                        p(class="card-text") #[strong Number In Stock:] #{inventory.numberInStock}
+                        p(class="card-text") #[strong Location:] #{inventory.location.name}
+            else 
+                p There is no inventory.
