@@ -1,0 +1,15 @@
+extends  ../layout 
+
+block content 
+    h1= title 
+
+    each equipment in equipment_list 
+        div(class="card text-bg-light border-secondary m-3")
+            div(class="card-body")
+                h5(class="card-title") #{equipment.name}
+                h6(class="card-subtitle mb-2 text-body-secondary") #{equipment.price} $
+                p(class="card-text") #{equipment.description}
+                a(href=equipment.url class="card-link icon-link icon-link-hover")  Check equipment
+    
+    else
+        p There are no equipments.

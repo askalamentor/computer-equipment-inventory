@@ -26,7 +26,15 @@ exports.index = asyncHandler(async (req, res, next) => {
 
 // Display list of all Equipments
 exports.equipment_list = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Equipment list');
+  const allEquipment = await Equipment.find({}, 'name description price')
+    .sort({ name: 1 })
+    .populate('description')
+    .exec();
+
+  res.render('equipment/equipment_list', {
+    title: 'Equipment List',
+    equipment_list: allEquipment,
+  });
 });
 
 // Display detail page for a specific Equipment
