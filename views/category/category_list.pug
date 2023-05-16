@@ -1,0 +1,11 @@
+extends ../layout
+
+block content 
+    h1= title 
+
+    div(class="list-group")
+        each category in category_list 
+            a(href=category.url class="list-group-item list-group-item-action") #{category.name}
+
+        else 
+            p There are no categories.
