@@ -3,7 +3,14 @@ const asyncHandler = require('express-async-handler');
 
 // Display list of all Locations
 exports.location_list = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Location list');
+  const allLocation = await Location.find({}, 'name address inventory')
+    .sort({ name: 1 })
+    .exec();
+
+  res.render('location/location_list', {
+    title: 'Location List',
+    location_list: allLocation,
+  });
 });
 
 // Display detail page for a specific Location

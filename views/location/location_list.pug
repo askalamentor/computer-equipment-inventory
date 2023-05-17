@@ -1,0 +1,16 @@
+extends ../layout
+
+block content 
+    h1= title 
+
+    div(class="container-fluid")
+        div(class="row justify-content-between")
+            each location in location_list 
+                div(class="card text-bg-light border-secondary col-5 mt-3 mb-3")
+                    div(class="card-body")
+                        a(href=location.url class="card-text card-link icon-link icon-link-hover") #{location.name}
+                        p(class="card-text") #[strong Address:] #{location.address}
+                        p(class="card-text") #[strong Inventory Records:]
+            else 
+                p There is no inventory.
+    
