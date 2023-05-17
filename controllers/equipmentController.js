@@ -39,7 +39,21 @@ exports.equipment_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific Equipment
 exports.equipment_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Equipment detail: ${req.params.id}`);
+  // Get details of equipment
+  const equipment = await Equipment.findById(req.params.id)
+    .populate('category')
+    .exec();
+
+  if (equipment === null) {
+    // No results.
+    const err = new Error('Equipment not found');
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render('equipment/equipment_detail', {
+    equipment: equipment,
+  });
 });
 
 // Display Equipment create form on GET.
