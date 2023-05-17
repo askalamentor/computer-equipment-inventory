@@ -43,18 +43,6 @@ async function main() {
     await location.save();
   }
 
-  /*  // get inventories from the database
-  const generatedInventories = await Inventory.find({}).exec();
-  // add inventories to locations
-  await Location.insertMany(
-    generatedLocations.map((location) => ({
-      ...location,
-      inventory: generatedInventories.find(
-        (inventory) => inventory.location === location._id
-      )?._id,
-    }))
-  ); */
-
   console.log('Debug: Closing mongoose');
   mongoose.connection.close();
 }

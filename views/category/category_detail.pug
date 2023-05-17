@@ -1,0 +1,18 @@
+extends ../layout
+
+block content 
+
+    h1 Category: #{category.name}
+
+    div(class="container-fluid")
+        div(class="row")
+        h4 Equipments       
+        each equipment in category_equipments
+            div(class="col-12 card mb-2")
+                div(class="card-body")
+                    a(href=equipment.url class="card-title card-link icon-link icon-link-hover") #[strong #{equipment.name}]
+                    p(class="card-text") #{equipment.description}
+
+        else 
+            p This category has no equipments
+                        
