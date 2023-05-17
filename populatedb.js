@@ -142,6 +142,7 @@ async function createInventories() {
   console.log('Adding inventories');
   await Promise.all([
     inventoryCreate(equipments[0], 50, locations[0]),
+    inventoryCreate(equipments[1], 20, locations[0]),
     inventoryCreate(equipments[1], 10, locations[1]),
     inventoryCreate(equipments[2], 5, locations[2]),
   ]);

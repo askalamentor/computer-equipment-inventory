@@ -5,6 +5,7 @@ const asyncHandler = require('express-async-handler');
 exports.location_list = asyncHandler(async (req, res, next) => {
   const allLocation = await Location.find({}, 'name address inventory')
     .sort({ name: 1 })
+    .populate('inventory')
     .exec();
 
   res.render('location/location_list', {

@@ -8,9 +8,9 @@ block content
             each location in location_list 
                 div(class="card text-bg-light border-secondary col-5 mt-3 mb-3")
                     div(class="card-body")
-                        a(href=location.url class="card-text card-link icon-link icon-link-hover") #{location.name}
+                        a(href=location.url class="card-title card-link icon-link icon-link-hover") #{location.name}
                         p(class="card-text") #[strong Address:] #{location.address}
-                        p(class="card-text") #[strong Inventory Records:]
+                        p(class="card-text") #[strong Inventory Records:] #{location.inventory.length}
             else 
                 p There is no inventory.
     
