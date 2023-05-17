@@ -7,6 +7,7 @@ console.log(
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);
 
+const e = require('express');
 const Category = require('./models/category');
 const Equipment = require('./models/equipment');
 const Inventory = require('./models/inventory');
@@ -32,6 +33,28 @@ async function main() {
   await createEquipments();
   await createLocations();
   await createInventories();
+
+  // get locations from the database
+  const generatedLocations = await Location.find({}).exec();
+
+  for (const location of generatedLocations) {
+    const inventories = await Inventory.find({ location: location._id });
+    location.inventory = inventories.map((inventory) => inventory._id);
+    await location.save();
+  }
+
+  /*  // get inventories from the database
+  const generatedInventories = await Inventory.find({}).exec();
+  // add inventories to locations
+  await Location.insertMany(
+    generatedLocations.map((location) => ({
+      ...location,
+      inventory: generatedInventories.find(
+        (inventory) => inventory.location === location._id
+      )?._id,
+    }))
+  ); */
+
   console.log('Debug: Closing mongoose');
   mongoose.connection.close();
 }
