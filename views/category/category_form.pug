@@ -1,0 +1,16 @@
+extends ../layout
+
+block content 
+    h1 #{title}
+
+    form(method="POST" action="")
+        div.form-group
+            label(for="name") Category: 
+            input#name.form-control(type="text", placeholder="Bag, Shoes etch." name="name" value=(undefined===genre ? "" : genre.name))
+        button.btn.btn-primary(type="submit") Submit 
+
+    if errors 
+        ul 
+            for errors in errors 
+                li!=error.msg
+        
