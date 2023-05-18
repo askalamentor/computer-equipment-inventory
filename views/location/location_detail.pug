@@ -1,0 +1,16 @@
+extends ../layout
+
+block content 
+    h1 #{location.name}
+
+    p #[strong Adress:] #{location.address}
+
+    h3 Available inventories of #{location.name}
+
+    hr
+
+    each inventory in inventories
+        ul 
+            li
+                a(href=inventory.equipment.url) #{inventory.equipment.name}
+                

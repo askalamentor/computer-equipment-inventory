@@ -11,6 +11,7 @@ block content
                         a(href=location.url class="card-title card-link icon-link icon-link-hover") #{location.name}
                         p(class="card-text") #[strong Address:] #{location.address}
                         p(class="card-text") #[strong Inventory Records:] #{location.inventory.length}
+                        a(href=location.url) See details
             else 
                 p There is no inventory.
     

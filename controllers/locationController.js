@@ -1,4 +1,5 @@
 const Location = require('../models/location');
+const Inventory = require('../models/inventory');
 const asyncHandler = require('express-async-handler');
 
 // Display list of all Locations
@@ -16,7 +17,22 @@ exports.location_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific Location
 exports.location_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Location detail: ${req.params.id}`);
+  const [location, allInventoriesByLocation] = await Promise.all([
+    Location.findById(req.params.id).exec(),
+    Inventory.find({ location: req.params.id }).populate('equipment').exec(),
+  ]);
+
+  if (location === null) {
+    // No results.
+    const err = new Error('Location not found');
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render('location/location_detail', {
+    location: location,
+    inventories: allInventoriesByLocation,
+  });
 });
 
 // Display Location create form on GET.
