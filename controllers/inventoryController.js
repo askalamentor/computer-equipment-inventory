@@ -18,7 +18,20 @@ exports.inventory_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific Inventory
 exports.inventory_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Inventory detail: ${req.params.id}`);
+  const inventory = await Inventory.findById(req.params.id)
+    .populate('equipment location')
+    .exec();
+
+  if (inventory === null) {
+    // No results.
+    const err = new Error('Inventory not found');
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render('inventory/inventory_detail', {
+    inventory: inventory,
+  });
 });
 
 // Display Inventory create form on GET.

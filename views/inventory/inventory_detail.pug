@@ -1,0 +1,10 @@
+extends ../layout
+
+block content 
+
+    h1 Inventory Detail 
+
+    a(href=inventory.equipment.url) #[strong Equipment: #{inventory.equipment.name}] 
+    p #[strong Number in stock:] #{inventory.numberInStock}
+    a(href=inventory.location.url) #[strong Location: #{inventory.location.name}]
+
