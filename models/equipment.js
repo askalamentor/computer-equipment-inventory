@@ -6,7 +6,7 @@ const EquipmentSchema = new Schema({
   name: { type: String, required: true, minLength: 3, maxLength: 100 },
   description: { type: String, required: true, minLength: 3, maxLength: 300 },
   price: { type: Number, required: true, min: 0, max: 1000000 },
-  category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+  category: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
 });
 
 // Virtual for equipment's URL

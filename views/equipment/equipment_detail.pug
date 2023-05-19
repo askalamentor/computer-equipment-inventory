@@ -4,7 +4,13 @@ block content
     h1 #{equipment.name}
 
     p #[strong Price:] #{equipment.price}
-    p #[strong Category:] #{equipment.category.name}
+
+    hr
+
+    p #[strong Categories:]
+    ul.list-group.list-group-horizontal
+        each category in equipment.category 
+            a(href=category.url class="list-group-item list-group-item-action") #{category.name}
 
     hr 
     
