@@ -89,12 +89,45 @@ exports.category_create_post = [
 
 // Display Category delete form on GET
 exports.category_delete_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Category delete GET');
+  // Get details of category and all related equipments (in parallel)
+  const [category, allEquipmentsByCategory] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Equipment.find({ category: req.params.id }, 'name description').exec(),
+  ]);
+
+  if (category === null) {
+    // No results
+    res.redirect('/catalog/categories');
+  }
+
+  res.render('category/category_delete', {
+    title: 'Delete Category',
+    category: category,
+    category_equipments: allEquipmentsByCategory,
+  });
 });
 
 // Handle Category delete on POST
 exports.category_delete_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Category delete POST');
+  // Get details of category and all related equipments (in parallel)
+  const [category, allEquipmentsByCategory] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Equipment.find({ category: req.params.id }, 'name description').exec(),
+  ]);
+
+  if (allEquipmentsByCategory.length > 0) {
+    // Category has equipments. Render in same was as for GET route.
+    res.render('category/category_delete', {
+      title: 'Delete Category',
+      category: category,
+      category_equipments: allEquipmentsByCategory,
+    });
+    return;
+  } else {
+    // Category has no equipments. Delete object and redirect to the list of categories.
+    await Category.findByIdAndRemove(req.body.categoryid);
+    res.redirect('/catalog/categories');
+  }
 });
 
 // Display Category update form on GET
