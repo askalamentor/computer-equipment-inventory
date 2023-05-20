@@ -1,0 +1,26 @@
+extends ../layout
+
+block content 
+    h1= title 
+
+    form(method="POST" action="")
+        div.form-group
+            label(for="equipment") #[strong Select Equipment:] 
+            select#equipment.form-select(name="equipment" required="true" value=(undefined === inventory ? "" : inventory.equipment))
+                each equipment in equipments 
+                    option(value=(equipment._id)) #{equipment.name}
+        div.form-group
+            label(for="location") #[strong Select Location:]
+            select#location.form-select(name="location" required="true" value=(undefined === inventory ? "" : inventory.location))
+                each location in locations 
+                    option(value=(location._id)) #{location.name}
+        div.form-group
+            label(for="numberInStock") #[strong Number in stock:]
+            input#numberInStock.form-control(type="number" placeholder="Number in stock" name="numberInStock"
+            require="true" value=(undefined === inventory ? "" : inventory.numberInStock))
+        button.btn.btn-primary(type="submit") Submit 
+    
+    if errors 
+        ul 
+            for error in errors 
+                li!= error.msg
