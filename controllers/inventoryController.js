@@ -124,6 +124,14 @@ exports.inventory_create_post = [
       });
     } else {
       // Data from form is valid.
+      // Save updated location
+      const existedLocation = await Location.findById(
+        inventory.location._id
+      ).exec();
+      existedLocation.inventory.push(inventory);
+
+      await existedLocation.save();
+
       await inventory.save();
       res.redirect(inventory.url);
     }
