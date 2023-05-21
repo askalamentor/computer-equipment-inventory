@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler');
+const mongoose = require('mongoose');
 const { body, validationResult } = require('express-validator');
 
 const Inventory = require('../models/inventory');
@@ -140,12 +141,59 @@ exports.inventory_create_post = [
 
 // Display Inventory delete form on GET
 exports.inventory_delete_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Inventory delete GET');
+  // Get details of inventory
+  const inventory = await Inventory.findById(req.params.id).exec();
+
+  if (inventory === null) {
+    // No results.
+    res.redirect('/catalog/inventories');
+  }
+
+  res.render('inventory/inventory_delete', {
+    title: 'Delete Inventory',
+    inventory: inventory,
+  });
 });
 
 // Handle Inventory delete on POST
 exports.inventory_delete_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Inventory delete POST');
+  // Delete object and redirect to the list of inventories.
+  await Inventory.findByIdAndRemove(req.body.inventoryid);
+
+  // Remove inventory from location
+  // Get location details.
+  const location = await Location.find(
+    { inventory: req.params.id },
+    'inventory'
+  ).exec();
+
+  // location.inventory array => [new ObjectId("id1"), new ObjectId("id2"), ...]
+  // So, we need to create new ObjectId
+  const inventoryIdToRemove = new mongoose.Types.ObjectId(
+    `${req.body.inventoryid}`
+  );
+
+  // Get location's inventory field.
+  // Inventory field => [{_id, inventory: []}], reason of location[0S]
+  const inventory = location[0].inventory;
+
+  // Get index of deleted inventory
+  const inventoryIndex = inventory.findIndex((id) =>
+    id.equals(inventoryIdToRemove)
+  );
+
+  if (inventoryIndex === -1) {
+    // Deleted inventory does not exist in location's inventory field.
+    const error = new Error('Not found inventory.');
+    error.status = 400;
+    return next(error);
+  } else {
+    // Remove deleted inventory from location's inventory field and save.
+    location[0].inventory.splice(inventoryIndex, 1);
+    await location[0].save();
+  }
+
+  res.redirect('/catalog/inventories');
 });
 
 // Display Inventory update form on GET

@@ -8,3 +8,8 @@ block content
     p #[strong Number in stock:] #{inventory.numberInStock}
     a(href=inventory.location.url) #[strong Location: #{inventory.location.name}]
 
+    hr 
+
+    p 
+        a(href=inventory.url+'/delete') Delete inventory
+
