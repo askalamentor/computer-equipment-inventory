@@ -142,12 +142,45 @@ exports.equipment_create_post = [
 
 // Display Equipment delete form on GET
 exports.equipment_delete_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Equipment delete GET');
+  // Get details of equipment and related imnventories
+  const [equipment, allInventoriesByEquipment] = await Promise.all([
+    Equipment.findById(req.params.id).exec(),
+    Inventory.find({ equipment: req.params.id }).populate('location').exec(),
+  ]);
+
+  if (equipment === null) {
+    // No results.
+    res.redirect('/catalog/equipments');
+  }
+
+  res.render('equipment/equipment_delete', {
+    title: 'Delete Equipment',
+    equipment: equipment,
+    equipment_inventories: allInventoriesByEquipment,
+  });
 });
 
 // Handle Equipment delete on POST
 exports.equipment_delete_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Equipment delete POST');
+  // Get details of equipment and related imnventories
+  const [equipment, allInventoriesByEquipment] = await Promise.all([
+    Equipment.findById(req.params.id).exec(),
+    Inventory.find({ equipment: req.params.id }).populate('location').exec(),
+  ]);
+
+  if (allInventoriesByEquipment.length > 0) {
+    // Equipment based inventory exists. Render in same way as for GET route.
+    res.render('equipment_delete', {
+      title: 'Delete Equipment',
+      equipment: equipment,
+      equipment_inventories: allInventoriesByEquipment,
+    });
+    return;
+  } else {
+    // There is no equipment based inventory. Delete equipment and redirect to the list of equipments.
+    await Equipment.findByIdAndRemove(req.body.equipmentid);
+    res.redirect('/catalog/equipments');
+  }
 });
 
 // Display Equipment update form on GET
