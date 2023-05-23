@@ -90,12 +90,49 @@ exports.location_create_post = [
 
 // Display Location delete form on GET
 exports.location_delete_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Location delete GET');
+  // Get details of locations and all their inventories (in parallel)
+  const [location, allInventoriesByLocation] = await Promise.all([
+    Location.findById(req.params.id).exec(),
+    Inventory.find({ location: req.params.id }, 'equipment numberInStock')
+      .populate('equipment')
+      .exec(),
+  ]);
+
+  if (location === null) {
+    // No results.
+    res.redirect('/catalog/locations');
+  }
+
+  res.render('location/location_delete', {
+    title: 'Delete Location',
+    location: location,
+    location_inventories: allInventoriesByLocation,
+  });
 });
 
 // Handle Location delete on POST
 exports.location_delete_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Location delete POST');
+  // Get details of locations and all their inventories (in parallel)
+  const [location, allInventoriesByLocation] = await Promise.all([
+    Location.findById(req.params.id).exec(),
+    Inventory.find({ location: req.params.id }, 'equipment numberInStock')
+      .populate('equipment')
+      .exec(),
+  ]);
+
+  if (allInventoriesByLocation.length > 0) {
+    // Location has inventories. Render in same way as for GET route.
+    res.render('location/location_delete', {
+      title: 'Delete Location',
+      location: location,
+      location_inventories: allInventoriesByLocation,
+    });
+    return;
+  } else {
+    // Location has no inventories. Delete object and redirect to the list of locations.
+    await Location.findByIdAndRemove(req.body.locationid);
+    res.redirect('/catalog/locations');
+  }
 });
 
 // Display Location update form on GET

@@ -1,0 +1,27 @@
+extends ../layout 
+
+block content 
+    h1 #{title}: #{location.name}
+
+    if location_inventories.length 
+
+        p #[strong Delete the following inventories before attempting to delete this location.]
+
+            div(style="margin-left:20px; margin-top:20px")
+
+            h4 Inventories 
+
+            dl 
+            each inventory in location_inventories 
+                dt 
+                    a(href=inventory.url) #{inventory.equipment.name}
+                dd #{inventory.numberInStock}
+
+    else 
+        p Do you really want to delete this Location?
+
+        form(method="POST" action="")
+            div.form-group
+                input#locationid.form-control(type="hidden" name="locationid" required="true" value=location._id)
+            
+            button.btn.btn-primary(type="submit") Delete
