@@ -137,10 +137,74 @@ exports.location_delete_post = asyncHandler(async (req, res, next) => {
 
 // Display Location update form on GET
 exports.location_update_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Location update GET');
+  // Get location.
+  const location = await Location.findById(req.params.id).exec();
+
+  if (location === null) {
+    // No results
+    const err = new Error('Location not found');
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render('location/location_form', {
+    title: 'Update Location',
+    location: location,
+  });
 });
 
 // Handle Location update on POST
-exports.location_update_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Location update POST');
-});
+exports.location_update_post = [
+  // Validate and sanitize fields.
+  body('name', 'Name must not be empty.')
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage('Name must be at least 3 characters')
+    .isLength({ max: 100 })
+    .withMessage('Name must not exceed 100 characters')
+    .escape(),
+  body('address', 'Address must not be empty.')
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage('Address must e at least 3 characters')
+    .isLength({ max: 200 })
+    .withMessage('Address must not exceed 200 characters')
+    .escape(),
+
+  // Process request after validation and sanitization
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request
+    const errors = validationResult(req);
+
+    // Get location inventories
+    const oldLocation = await Location.findById(req.params.id).exec();
+
+    // Create a Location object with escaped/trimmed data and old id
+    const location = new Location({
+      name: req.body.name,
+      address: req.body.address,
+      inventory: oldLocation.inventory,
+      _id: req.params.id, // This is required, or a new ID will be assigned!
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error message
+      res.render('locatin/location_form', {
+        title: 'Update Location',
+        location: location,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the location
+      const theLocation = await Location.findByIdAndUpdate(
+        req.params.id,
+        location,
+        {}
+      );
+
+      // Redirect to location detail
+      res.redirect(theLocation.url);
+    }
+  }),
+];
