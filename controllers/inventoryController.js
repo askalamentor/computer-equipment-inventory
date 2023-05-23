@@ -198,10 +198,134 @@ exports.inventory_delete_post = asyncHandler(async (req, res, next) => {
 
 // Display Inventory update form on GET
 exports.inventory_update_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Inventory update GET');
+  // Get inventory, equipments, and locations.
+  const [inventory, allEquipments, allLocations] = await Promise.all([
+    Inventory.findById(req.params.id)
+      .populate('equipment')
+      .populate('location')
+      .exec(),
+    Equipment.find().exec(),
+    Location.find().exec(),
+  ]);
+
+  if (inventory === null) {
+    // No results.
+    const err = new Error('Inventory not found');
+    err.status = 404;
+    return next(err);
+  }
+
+  // Mark our selected equipment and location as checked.
+  for (const equipment of allEquipments) {
+    if (equipment._id.toString() === inventory.equipment._id.toString()) {
+      equipment.checked = 'true';
+    }
+  }
+
+  for (const location of allLocations) {
+    if (location._id.toString() === inventory.location._id.toString()) {
+      location.checked = 'true';
+    }
+  }
+
+  // Render inventory form
+  res.render('inventory/inventory_form', {
+    title: 'Update Inventory',
+    inventory: inventory,
+    equipments: allEquipments,
+    locations: allLocations,
+  });
 });
 
 // Handle Inventory update on POST
-exports.inventory_update_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Inventory update POST');
-});
+exports.inventory_update_post = [
+  // Convert equipments and locations to an array (seperate)
+  (req, res, next) => {
+    if (!(req.body.equipment instanceof Array)) {
+      if (typeof req.body.equipment === 'undefined') {
+        req.body.equipment = [];
+      } else {
+        req.body.equipment = new Array(req.body.equipment);
+      }
+    }
+
+    if (!(req.body.location instanceof Array)) {
+      if (typeof req.body.location === 'undefined') {
+        req.body.location = [];
+      } else {
+        req.body.location = new Array(req.body.location);
+      }
+    }
+    next();
+  },
+
+  // Validate and sanitize fields
+  body('numberInStock', 'Number in stock must not be empty.')
+    .trim()
+    .isInt(0)
+    .withMessage('Number in stock must be at least 0')
+    .isInt(1000000)
+    .withMessage('Number in stock must not exceed 1000000')
+    .escape(),
+  body('equipment.*').escape(),
+  body('location.*').escape(),
+
+  // Process request after validation and sanitization
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request
+    const errors = validationResult(req);
+
+    // Create a Inventory object with escaped/trimmed data and old id
+    const inventory = new Inventory({
+      equipment:
+        typeof req.body.equipment === 'undefined' ? [] : req.body.equipment,
+      numberInStock: req.body.numberInStock,
+      location:
+        typeof req.body.location === 'undefined' ? [] : req.body.location,
+      _id: req.params.id, // This is required, or a new ID will be assigned!
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages
+
+      // Get all equipments and locations.
+      const [allEquipments, allLocations] = await Promise.all([
+        Equipment.find().exec(),
+        Location.find().exec(),
+      ]);
+
+      // Mark our selected equipment and location as checked
+      for (const equipment of allEquipments) {
+        if (inventory.equipment.indexOf(equipment._id) > -1) {
+          equipment.checked = 'true';
+        }
+      }
+
+      for (const location of allLocations) {
+        if (inventory.location.indexOf(location._id) > -1) {
+          location.checked = 'true';
+        }
+      }
+
+      // Render form
+      res.render('inventory/inventory_form', {
+        title: 'Update Inventory',
+        inventory: inventory,
+        equipments: allEquipments,
+        locations: allLocations,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the inventory.
+      const theInventory = await Inventory.findByIdAndUpdate(
+        req.params.id,
+        inventory,
+        {}
+      );
+
+      // Redirect to inventory detail page
+      res.redirect(theInventory.url);
+    }
+  }),
+];
