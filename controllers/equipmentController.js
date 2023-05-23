@@ -185,10 +185,117 @@ exports.equipment_delete_post = asyncHandler(async (req, res, next) => {
 
 // Display Equipment update form on GET
 exports.equipment_update_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Equipment update GET');
+  // Get equipment and categories.
+  const [equipment, allCategories] = await Promise.all([
+    Equipment.findById(req.params.id).populate('category').exec(),
+    Category.find().exec(),
+  ]);
+
+  if (equipment === null) {
+    // No results.
+    const err = new Error('Equipment not found.');
+    err.status = 404;
+    return next(err);
+  }
+
+  // Mark our selected category as checked.
+  for (const category of allCategories) {
+    for (const equipment_category of equipment.category) {
+      if (category._id.toString() === equipment_category._id.toString()) {
+        category.checked = 'true';
+      }
+    }
+  }
+
+  res.render('equipment/equipment_form', {
+    title: 'Update Equipment',
+    equipment: equipment,
+    categories: allCategories,
+  });
 });
 
 // Handle Equipment update on POST
-exports.equipment_update_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Equipment update POST');
-});
+exports.equipment_update_post = [
+  // Convert the category to an array.
+  (req, res, next) => {
+    if (!(req.body.category instanceof Array)) {
+      if (typeof req.body.category === 'undefined') {
+        req.body.category = [];
+      } else {
+        req.body.category = new Array(req.body.category);
+      }
+    }
+    next();
+  },
+
+  // Validate and sanitize fields.
+  body('name')
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage('Equipment name must be at least have 3 characters')
+    .isLength({ max: 100 })
+    .withMessage('Equipment name must not exceed 100 characters')
+    .escape(),
+  body('description')
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage('Description must be at least have 3 characters')
+    .isLength({ max: 300 })
+    .withMessage('Description must not exceed 300 characters')
+    .escape(),
+  body('price')
+    .trim()
+    .isFloat({ min: 0 })
+    .withMessage('Price must be at least 0')
+    .isFloat({ max: 1000000 })
+    .withMessage('Price must not exceed 1000000')
+    .escape(),
+  body('category.*').escape(),
+
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a Equipment object with escaped/trimmed data and old id.
+    const equipment = new Equipment({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      category:
+        typeof req.body.category === 'undefined' ? [] : req.body.category,
+      _id: req.params.id, // This is required, or a new ID will be assigned.
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+
+      // Get all categories.
+      const allCategories = await Category.find().exec();
+
+      // Mark our selected categories as checked.
+      for (const category of allCategories) {
+        if (equipment.category.indexOf(category._id) > -1) {
+          category.checked = 'true';
+        }
+      }
+
+      res.render('equipment/equipment_form', {
+        title: 'Update Equipment',
+        equipment: equipment,
+        categories: allCategories,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data form is valid. Update the equipment.
+      const theEquipment = await Equipment.findByIdAndUpdate(
+        req.params.id,
+        equipment,
+        {}
+      );
+      // Redirect to equipment detail page.
+      res.redirect(theEquipment.url);
+    }
+  }),
+];
