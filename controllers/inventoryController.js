@@ -8,10 +8,7 @@ const Location = require('../models/location');
 
 // Display list of all Inventories
 exports.inventory_list = asyncHandler(async (req, res, next) => {
-  const allInventory = await Inventory.find(
-    {},
-    'equipment numberInStock location'
-  )
+  const allInventory = await Inventory.find({})
     .populate('equipment location')
     .exec();
 

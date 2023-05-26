@@ -5,7 +5,7 @@ const { body, validationResult } = require('express-validator');
 
 // Display list of all Categories
 exports.category_list = asyncHandler(async (req, res, next) => {
-  const allCategory = await Category.find({}, 'name').sort({ name: 1 }).exec();
+  const allCategory = await Category.find({}).sort({ name: 1 }).exec();
 
   res.render('category/category_list', {
     title: 'Category List',

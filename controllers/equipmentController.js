@@ -27,10 +27,7 @@ exports.index = asyncHandler(async (req, res, next) => {
 
 // Display list of all Equipments
 exports.equipment_list = asyncHandler(async (req, res, next) => {
-  const allEquipment = await Equipment.find({}, 'name description price')
-    .sort({ name: 1 })
-    .populate('description')
-    .exec();
+  const allEquipment = await Equipment.find({}).sort({ name: 1 }).exec();
 
   res.render('equipment/equipment_list', {
     title: 'Equipment List',
