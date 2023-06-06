@@ -8,32 +8,35 @@ html(lang="en")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous")
     link(rel='stylesheet', href="/stylesheets/style.css")
     title title
-  body 
-    div(class='container-fluid')
-      div(class='row')
-        div(class='col-sm-2')
-          block sidebar
-            ul(class='sidebar-nav')
-              li 
-                a(href='/catalog') Home
-              li 
-                a(href='/catalog/categories') Categories
-              li 
-                a(href='/catalog/equipments') Equipments
-              li 
-                a(href='/catalog/inventories') Inventories 
-              li 
-                a(href='/catalog/locations') Locations 
-              li 
-                hr
-              li
-                a(href='/catalog/category/create') Create new category
-              li
-                a(href='/catalog/equipment/create') Create new equipment
-              li
-                a(href='/catalog/inventory/create') Create new inventory
-              li
-                a(href='/catalog/location/create') Create new location
+  body
+    div.container-fluid.m-0.p-0
+      nav.navbar.navbar-expand-lg.bg-dark
+        div.container-fluid
+          button.navbar-toggler.bg-light(type="button", data-bs-toggle="collapse" data-bs-target="#navbarToggler" 
+          aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation")
+            span.navbar-toggler-icon
+          div.container-fluid.collapse.navbar-collapse(id="navbarToggler")
+            ul.container-fluid.navbar-nav
+              div.container-fluid.d-flex.flex-column.flex-lg-row.justify-content-between.justify-content-lg-start.align-items-center
+                li.nav-item
+                  a.nav-link.text-light.fs-4(href='/catalog') Home
+                li.nav-item  
+                  a.nav-link.text-light.fs-4(href='/catalog/categories') Categories
+                li.nav-item  
+                  a.nav-link.text-light.fs-4(href='/catalog/equipments') Equipments
+                li.nav-item  
+                  a.nav-link.text-light.fs-4(href='/catalog/inventories') Inventories 
+                li.nav-item  
+                  a.nav-link.text-light.fs-4(href='/catalog/locations') Locations
 
-        div(class='col-sm-10')
-          block content
+              div.container-fluid.d-flex.flex-column.flex-lg-row.justify-content-between.justify-content-lg-evenly.align-items-center
+                li.nav-item 
+                  a.nav-link.text-warning.fs-5(href='/catalog/category/create') Create new category
+                li.nav-item 
+                  a.nav-link.text-warning.fs-5(href='/catalog/equipment/create') Create new equipment
+                li.nav-item 
+                  a.nav-link.text-warning.fs-5(href='/catalog/inventory/create') Create new inventory
+                li.nav-item 
+                  a.nav-link.text-warning.fs-5(href='/catalog/location/create') Create new location
+
+      block content
