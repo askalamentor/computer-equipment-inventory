@@ -1,15 +1,16 @@
 extends layout 
 
-block content 
-    h1= title 
-    p Welcome to Computer Equipment Inventory.
+block content
+    div.container-fluid
+        div.row
+            div.col
+                div.container-fluid.d-flex.flex-column.justify-content-center.align-items-center
+                    h1.text-center(style="margin:7rem") Welcome to Computer Equipment Inventory
 
-    h1 Dynamic Content 
+                    h2.text-center.mt-5.mb-4 The system has the following record counts 
 
-    p The system has the following record counts: 
-
-    ul 
-        li #[strong Categories:] !{category_counts}
-        li #[strong Equipments:] !{equipment_counts}
-        li #[strong Inventories:] !{inventory_counts}
-        li #[strong Locations:] !{location_counts}
+                    ul.list-group.list-group-flush.d-flex.flex-column.flex-md-row 
+                        li.list-group-item.list-group-item-success #[strong Categories:] !{category_counts}
+                        li.list-group-item.list-group-item-success #[strong Equipments:] !{equipment_counts}
+                        li.list-group-item.list-group-item-success #[strong Inventories:] !{inventory_counts}
+                        li.list-group-item.list-group-item-success #[strong Locations:] !{location_counts}
