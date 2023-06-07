@@ -1,12 +1,12 @@
 extends ../layout
 
 block content 
-    h1 #{title}
+    h1.text-center.p-4.text-dark #{title}
 
-    p Do you really want to delete this inventory?
+    p.text-center.p-4.text-dark.fs-3 Do you really want to delete this inventory?
 
     form(method="POST" action="")
-        div.form-group
-            input#inventoryid.fomr-control(type="hidden" name="inventoryid" required="true" value=inventory._id)
-        
-        button.btn.btn-primary(type="submit") Delete
+        div.d-flex.flex-column.align-items-center
+                div.form-group.mt-5.mb-5.col-10
+                    input.form-control.p-3(type="hidden" id="inventoryid" name="inventoryid" required="true" value=inventory._id)
+                button.btn.btn-primary(type="submit") Delete Inventory

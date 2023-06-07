@@ -2,16 +2,26 @@ extends ../layout
 
 block content 
 
-    h1 Inventory Detail 
+    h1.text-center.p-4.text-dark Inventory Detail 
 
-    a(href=inventory.equipment.url) #[strong Equipment: #{inventory.equipment.name}] 
-    p #[strong Number in stock:] #{inventory.numberInStock}
-    a(href=inventory.location.url) #[strong Location: #{inventory.location.name}]
+    div.container-fluid
+        div.row
+            div.col
+                div.p-5
+                    a.card-link.icon-link.icon-link-hover.link-info.link-underline.link-underline-opacity-0.fs-4(href=inventory.equipment.url) #[strong Equipment: #{inventory.equipment.name}] 
 
-    hr 
+                    hr.mt-4.mb-4
 
-    p 
-        a(href=inventory.url+'/delete') Delete Inventory
-    p 
-        a(href=inventory.url+'/update') Update Inventory
+                    p.fs-4 #[strong Number in stock:] #{inventory.numberInStock}
+
+                    hr.mt-4.mb-4
+
+                    a.card-link.icon-link.icon-link-hover.link-info.link-underline.link-underline-opacity-0.fs-4(href=inventory.location.url) #[strong Location: #{inventory.location.name}]
+
+                    hr.mt-4.mb-4
+
+                    div.container-fluid.d-flex.justify-content-center
+                        a.btn.btn-primary.btn-lg.m-2(href=inventory.url+'/update') Update Inventory
+                        a.btn.btn-danger.btn-lg.m-2(href=inventory.url+'/delete') Delete Inventory
+                        
 

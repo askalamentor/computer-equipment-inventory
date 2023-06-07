@@ -1,26 +1,31 @@
 extends ../layout
 
 block content 
-    h1= title 
+    h1.text-center.p-4.text-dark= title 
 
-    form(method="POST" action="")
-        div.form-group
-            label(for="equipment") #[strong Select Equipment:] 
-            select#equipment.form-select(name="equipment" required="true" value=(undefined === inventory ? "" : inventory.equipment))
-                each equipment in equipments 
-                    option(value=(equipment._id)) #{equipment.name}
-        div.form-group
-            label(for="location") #[strong Select Location:]
-            select#location.form-select(name="location" required="true" value=(undefined === inventory ? "" : inventory.location))
-                each location in locations 
-                    option(value=(location._id)) #{location.name}
-        div.form-group
-            label(for="numberInStock") #[strong Number in stock:]
-            input#numberInStock.form-control(type="number" placeholder="Number in stock" name="numberInStock"
-            require="true" value=(undefined === inventory ? "" : inventory.numberInStock))
-        button.btn.btn-primary(type="submit") Submit 
-    
-    if errors 
-        ul 
-            for error in errors 
-                li!= error.msg
+    div.container-fluid
+        div.row
+            div.col
+                div.container-fluid
+                    form(method="POST" action="")
+                        div.d-flex.flex-column.align-items-center
+                            div.form-group.col-10.mb-3.fs-4
+                                label.mb-2(for="equipment") #[strong Select Equipment:] 
+                                select#equipment.form-select(name="equipment" required="true" value=(undefined === inventory ? "" : inventory.equipment))
+                                    each equipment in equipments 
+                                        option(value=(equipment._id)) #{equipment.name}
+                            div.form-group.col-10.mb-3.fs-4
+                                label.mb-2(for="location") #[strong Select Location:]
+                                select#location.form-select(name="location" required="true" value=(undefined === inventory ? "" : inventory.location))
+                                    each location in locations 
+                                        option(value=(location._id)) #{location.name}
+                            div.form-group.col-10.mb-5.fs-4
+                                label.mb-2(for="numberInStock") #[strong Number in stock:]
+                                input#numberInStock.form-control(type="number" placeholder="Number in stock" name="numberInStock"
+                                require="true" value=(undefined === inventory ? "" : inventory.numberInStock))
+                            button.btn.btn-primary.btn-lg(type="submit") Create Inventory
+                        
+                        if errors 
+                            ul 
+                                for error in errors 
+                                    li!= error.msg

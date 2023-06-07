@@ -1,16 +1,18 @@
 extends ../layout
 
 block content
-    h1= title 
+    h1.text-center.p-4.text-dark= title 
 
-    div(class="container-fluid")
-        div(class="row justify-content-between")
-            each inventory in inventory_list 
-                div(class="card text-bg-light border-secondary col-5 mt-3 mb-3")
-                    div(class="card-body")
-                        p(class="card-text") #[strong Equipment:] #{inventory.equipment.name}
-                        p(class="card-text") #[strong Number In Stock:] #{inventory.numberInStock}
-                        p(class="card-text") #[strong Location:] #{inventory.location.name}
-                        a(href=inventory.url) #[strong See details]
-            else 
-                p There is no inventory.
+    div.container-fluid.p-5
+        div.row
+            div.col
+                div.container-fluid.d-flex.flex-column.flex-lg-row.flex-wrap.align-items-center.justify-content-evenly
+                    each inventory in inventory_list 
+                        div.card.col-10.col-lg-5.mb-4.p-1.bg-secondary
+                            div.card-body
+                                p.card-text.text-light #[strong Equipment:] #{inventory.equipment.name}
+                                p.card-text.text-light #[strong Number In Stock:] #{inventory.numberInStock}
+                                p.card-text.text-light #[strong Location:] #{inventory.location.name}
+                                a.card-link.icon-link.icon-link-hover.link-info.link-underline.link-underline-opacity-0(href=inventory.url) #[strong Check Inventory]
+                    else 
+                        p There is no inventory.

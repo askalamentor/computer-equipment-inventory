@@ -7,18 +7,18 @@ block content
         div.row
             div.col
                 div.p-5
-                    p #[strong Price:] #{equipment.price} $
+                    p.fs-4 #[strong Price:] #{equipment.price} $
 
                     hr.mt-4.mb-4
 
-                    p #[strong Categories:]
+                    p.fs-4 #[strong Categories:]
                     ul.list-group.list-group-horizontal
                         each category in equipment.category 
                             a(href=category.url class="list-group-item list-group-item-action") #{category.name}
 
                     hr.mt-4.mb-4 
                     
-                    p #[strong Description:] #{equipment.description}
+                    p.fs-4 #[strong Description:] #{equipment.description}
                     
                     hr.mt-4.mb-4
 
