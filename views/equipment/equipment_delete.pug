@@ -1,26 +1,31 @@
 extends ../layout
 
 block content 
-    h1 #{title}: #{equipment.name}
+    h1.text-center.p-4.text-dark #{title}: #{equipment.name}
 
     if equipment_inventories.length 
 
-        p #[strong Delete the following inventories before attempting to delete this equipment.]
+        p.text-center.p-4.text-danger #[strong Delete the following inventories before attempting to delete this equipment.]
 
-        div(style="margin-left:20px;margin-top:20px")
+            div.d-flex.flex-column.align-items-center(style="margin-left:20px;margin-top:20px")
 
-        h4 Inventories 
+                h4.p-4.text-dark Inventories 
 
-        dl 
-        each inventory in equipment_inventories 
-            dt 
-                a(href=inventory.url) #{inventory.numberInStock} items in #{inventory.location.name}
+                div.container-fluid
+                    div.row
+                        div.col
+                            div.container-fluid.d-flex.flex-column.flex-lg-row.flex-wrap.align-items-center.justify-content-evenly
+                                each inventory in equipment_inventories 
+                                    div.card.col-10.col-lg-5.mb-4.p-1.bg-secondary
+                                        div.card-body
+                                            a.card-title.card-link.icon-link.icon-link-hover.text-warning.fs-4.link-underline.link-underline-opacity-0(href=inventory.url) #{inventory.numberInStock} pieces of #{equipment.name}
+                                            p.card-text.text-light Location #{inventory.location.name}
 
     else 
-        p Do you really want to delete this equipment?
+        p.text-center.p-4.text-dark Do you really want to delete this equipment?
 
         form(method="POST" action="")
-            div.form-group
-                input#equipmentid.form-control(type="hidden" name="equipmentid", required="true" value=equipment._id)
-        
-            button.btn.btn-primary(type="submit") Delete
+            div.d-flex.flex-column.align-items-center
+                div.form-group.mt-5.mb-5.col-10
+                    input.form-control.p-3(type="hidden" id="equipmentid" name="equipmentid", required="true" value=equipment._id)
+                button.btn.btn-primary(type="submit") Delete Equipment

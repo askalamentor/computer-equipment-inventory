@@ -1,25 +1,30 @@
 extends ../layout
 
 block content 
-    h1 #{equipment.name}
+    h1.text-center.p-4.text-dark #{equipment.name}
 
-    p #[strong Price:] #{equipment.price}
+    div.container-fluid
+        div.row
+            div.col
+                div.p-5
+                    p #[strong Price:] #{equipment.price} $
 
-    hr
+                    hr.mt-4.mb-4
 
-    p #[strong Categories:]
-    ul.list-group.list-group-horizontal
-        each category in equipment.category 
-            a(href=category.url class="list-group-item list-group-item-action") #{category.name}
+                    p #[strong Categories:]
+                    ul.list-group.list-group-horizontal
+                        each category in equipment.category 
+                            a(href=category.url class="list-group-item list-group-item-action") #{category.name}
 
-    hr 
-    
-    p #[strong Description:] #{equipment.description}
-    
-    hr
-    p 
-        a(href=equipment.url+'/delete') Delete Equipment
-    p 
-        a(href=equipment.url+'/update') Update Equipment
+                    hr.mt-4.mb-4 
+                    
+                    p #[strong Description:] #{equipment.description}
+                    
+                    hr.mt-4.mb-4
+
+                    div.container-fluid.d-flex.justify-content-center
+                        a.btn.btn-primary.btn-lg.m-2(href=equipment.url+'/update') Update Equipment
+                        a.btn.btn-danger.btn-lg.m-2(href=equipment.url+'/delete') Delete Equipment
+                      
 
     

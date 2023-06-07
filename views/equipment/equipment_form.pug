@@ -1,33 +1,38 @@
 extends ../layout
 
 block content 
-    h1=title 
+    h1.text-center.p-4.text-dark=title 
 
-    form(method="POST" actions="")
-        div.form-group
-            label(for="name") Name: 
-            input#name.form-control(type="text" placeholder="Name of equipment" name="name"
-            required="true" value=(undefined === equipment ? "" : equipment.name))
-        div.form-group
-            label(for="description") Description: 
-            textarea#description.form-control(type="textarea" name="description" placeholder="Description of equipment" rows="5"
-            style="resize:none" required="true") 
-        div.form-group
-            label(for="price") Price: 
-            input#price.form-control(type="number" placeholder="Price of equipment"
-            name="price" required="true" value=(undefined === equipment ? "" : equipment.price))
-        div.form-group
-            label(for="category") Category: 
-            div 
-                for category in categories 
-                    div(style="display: inline; padding-right:10px;")
-                        input.checkbox-input(type="checkbox", name="category", id=category._id, 
-                        value=category._id, checked=category.checked)
-                        label(for=category._id) #{category.name}
-        button.btn.btn-primary(type="submit") Submit 
-    
-    if errors 
-        ul 
-            for error in errors 
-                li!= error.msg
+    div.container-fluid
+        div.row
+            div.col
+                div.container-fluid
+                    form(method="POST" actions="")
+                        div.d-flex.flex-column.align-items-center
+                            div.form-group.col-10.mb-3
+                                label(for="name") Name: 
+                                input#name.form-control(type="text" placeholder="Name of equipment" name="name"
+                                required="true" value=(undefined === equipment ? "" : equipment.name))
+                            div.form-group.col-10.mb-3
+                                label(for="description") Description: 
+                                textarea#description.form-control(type="textarea" name="description" placeholder="Description of equipment" rows="5"
+                                style="resize:none" required="true") 
+                            div.form-group.col-10.mb-3
+                                label(for="price") Price: 
+                                input#price.form-control(type="number" placeholder="Price of equipment"
+                                name="price" required="true" value=(undefined === equipment ? "" : equipment.price))
+                            div.form-group.col-10.mb-5
+                                label(for="category") Category: 
+                                div 
+                                    for category in categories 
+                                        div(style="display: inline; padding-right:10px;")
+                                            input.checkbox-input(type="checkbox", name="category", id=category._id, 
+                                            value=category._id, checked=category.checked)
+                                            label(for=category._id) #{category.name}
+                            button.btn.btn-primary.btn-lg(type="submit") Create Equipment 
+                        
+                        if errors 
+                            ul 
+                                for error in errors 
+                                    li!= error.msg
 
