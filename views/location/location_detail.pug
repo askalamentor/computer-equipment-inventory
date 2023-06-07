@@ -1,21 +1,27 @@
 extends ../layout
 
 block content 
-    h1 #{location.name}
+    h1.text-center.p-4.text-dark #{location.name}
 
-    p #[strong Adress:] #{location.address}
+    div.container-fluid
+        div.row
+            div.col
+                div.p-5
 
-    h3 Available inventories of #{location.name}
+                    p.fs-4 #[strong Adress:] #{location.address}
 
-    hr
+                    hr.mt-4.mb-4
 
-    each inventory in inventories
-        ul 
-            li
-                a(href=inventory.equipment.url) #{inventory.equipment.name}
-                
-    hr
-    p 
-        a(href=location.url+'/delete') Delete Location
-    p 
-        a(href=location.url+'/update') Update Location
+                    h3 Available inventories of #{location.name}
+
+                    each inventory in inventories
+                        ul 
+                            li
+                                a.card-link.icon-link.icon-link-hover.link-info.link-underline.link-underline-opacity-0.fs-4(href=inventory.equipment.url) #{inventory.equipment.name}
+                                
+                    hr.mt-4.mb-4
+
+                    div.container-fluid.d-flex.justify-content-center
+                        a.btn.btn-primary.btn-lg.m-2(href=location.url+'/update') Update Location
+                        a.btn.btn-danger.btn-lg.m-2(href=location.url+'/delete') Delete Location 
+                        

@@ -1,17 +1,19 @@
 extends ../layout
 
 block content 
-    h1= title 
+    h1.text-center.p-4.text-dark= title 
 
-    div(class="container-fluid")
-        div(class="row justify-content-between")
-            each location in location_list 
-                div(class="col-5 card text-bg-light border-secondary mt-3 mb-3")
-                    div(class="card-body")
-                        a(href=location.url class="card-title card-link icon-link icon-link-hover") #{location.name}
-                        p(class="card-text") #[strong Address:] #{location.address}
-                        p(class="card-text") #[strong Inventory Records:] #{location.inventory.length}
-                        a(href=location.url) See details
-            else 
-                p There is no inventory.
+    div.container-fluid.p-5
+        div.row
+            div.col
+                div.container-fluid.d-flex.flex-column.flex-lg-row.flex-wrap.align-items-center.justify-content-evenly
+                    each location in location_list 
+                        div.card.col-10.col-lg-5.mb-4.p-1.bg-secondary
+                            div.card-body
+                                p.card-title.text-warning.fs-4 #[strong #{location.name}]
+                                p.card-text.text-light #[strong Address:] #{location.address}
+                                p.card-text.text-light #[strong Inventory Records:] #{location.inventory.length}
+                                a.card-link.icon-link.icon-link-hover.link-info.link-underline.link-underline-opacity-0(href=location.url) Check Location
+                    else 
+                        p There is no inventory.
     
