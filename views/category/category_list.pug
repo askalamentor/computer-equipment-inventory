@@ -3,12 +3,12 @@ extends ../layout
 block content 
     h1.text-center.p-4.text-dark= title
 
-    div.container-fluid
+    div.container-fluid.p-5
         div.row
             div.col
-                div.container-fluid.w-75
-                    ul.list-group
+                div.container-fluid.d-flex.flex-column.flex-lg-row.flex-wrap.align-items-center.justify-content-evenly
+                    ul.list-group.col-10.mb-4.p-1
                         each category in category_list 
                             a.list-group-item.list-group-item-action.list-group-item-light.text-dark.p-3.text-center.text-lg-start(href=category.url) #{category.name}
                         else 
-                            p There are no categories.
+                            p.text-center There are no categories.

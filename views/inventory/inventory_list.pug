@@ -10,9 +10,9 @@ block content
                     each inventory in inventory_list 
                         div.card.col-10.col-lg-5.mb-4.p-1.bg-secondary
                             div.card-body
-                                p.card-text.text-light #[strong Equipment:] #{inventory.equipment.name}
+                                p.card-text.text-warning #[strong #{inventory.equipment.name}]
                                 p.card-text.text-light #[strong Number In Stock:] #{inventory.numberInStock}
                                 p.card-text.text-light #[strong Location:] #{inventory.location.name}
                                 a.card-link.icon-link.icon-link-hover.link-info.link-underline.link-underline-opacity-0(href=inventory.url) #[strong Check Inventory]
                     else 
-                        p There is no inventory.
+                        p There are no inventories.

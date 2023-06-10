@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 // Create model
 const EquipmentSchema = new Schema({
   name: { type: String, required: true, minLength: 3, maxLength: 100 },
-  description: { type: String, required: true, minLength: 3, maxLength: 300 },
+  description: { type: String, required: true, minLength: 3, maxLength: 500 },
   price: { type: Number, required: true, min: 0, max: 1000000 },
   category: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
 });

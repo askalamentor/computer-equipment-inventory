@@ -87,8 +87,8 @@ exports.equipment_create_post = [
     .trim()
     .isLength({ min: 3 })
     .withMessage('Description must be at least have 3 characters')
-    .isLength({ max: 300 })
-    .withMessage('Description must not exceed 300 characters')
+    .isLength({ max: 500 })
+    .withMessage('Description must not exceed 500 characters')
     .escape(),
   body('price')
     .trim()
